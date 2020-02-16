@@ -1,0 +1,27 @@
+package main
+
+import (
+	"bytes"
+	"strings"
+	"testing"
+
+	"github.com/GoogleCloudPlatform/golang-samples/internal/testutil"
+)
+
+func TestSimpleApp(t *testing.T) {
+	tc := testutil.SystemTest(t)
+
+	rows, err := query(tc.ProjectID)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var b bytes.Buffer
+	if err := printResults(&b, rows); err != nil {
+		t.Fatal(err)
+	}
+
+	if !strings.Contains(b.String(), "views:") {
+		t.Errorf("got output: %q; want it to contain views:", b.String())
+	}
+}
